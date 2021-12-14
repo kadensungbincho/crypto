@@ -105,11 +105,7 @@ class Blockchain:
     
 app = Flask(__name__)
 app.config['JSONIFY_PRETTYPRINT_REGULAR'] = False
-
-node_address = str(uuid4()).replace('-', '')
-
 blockchain = Blockchain()
-
 
 @app.route('/mine_block', methods = ['GET'])
 def mine_block():
@@ -124,6 +120,7 @@ def mine_block():
     }
     return jsonify(responses), 200
 
+
 @app.route('/get_chain', methods = ['GET'])
 def get_chain():
     response = {
@@ -131,22 +128,6 @@ def get_chain():
         'length': len(blockchain.chain)
     }
     return jsonify(response), 200
-
-@app.route('/add_transaction', methods = ['POST'])
-def add_transaction():
-    json = request.get_json()
-    transaction_keys = ['sender', 'receiver', 'amount']
-    if not all (key in json for key in transaction_keys):
-        return 'Some elements of the transaction are missing', 400
-    index = blockchain.add_transaction(
-        sender = json['sender'],
-        receiver = json['receiver'],
-        amount = json['amount']
-    )
-    response = {
-        'message': f'This transaction will be added to Block {index}'
-    }
-    return jsonify(response), 201
 
 
 app.run(host = '0.0.0.0', port = 5000)
