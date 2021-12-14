@@ -66,6 +66,15 @@ class Blockchain:
             block_index += 1
             
         return True
+
+    def add_transaction(self, sender, receiver, amount):
+        self.transactions.append({
+            'sender': sender,
+            'receiver': receiver,
+            'amount': amount
+        })
+
+        return self.get_previous_block()['index'] + 1
     
     
 app = Flask(__name__)
