@@ -159,5 +159,20 @@ def connect_node():
     }
     return jsonify(response), 201
 
+@app.route('/update_chain', methods = ['GET'])
+def update_chain():
+    is_chain_updated = blockchain.update_chain()
+    if is_chain_updated:
+        response = {
+            'message': 'The nodes had different chains so the chain was replacted by the longest chain.',
+            'new_chain': blockchain.chain
+        }
+    else:
+        response = {
+            'message': 'All good. The chain is the largest one.',
+            'actual_chain': blockchain.chain
+        }
+    return jsonify(response), 200
+
 
 app.run(host = '0.0.0.0', port = 5000)
